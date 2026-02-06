@@ -14,11 +14,11 @@ const getCenterMeta = (centerId) =>
 
 export default function CenterBadge({ centerId, isActive, size = "md" }) {
   const center = getCenterMeta(centerId);
-  const sizeClasses = size === "sm" ? "px-2 py-0.5 text-[10px]" : "px-3 py-1 text-xs";
+  const sizeClasses = size === "sm" ? "px-2 py-0.5 text-[9px]" : "px-2.5 py-0.5 text-[10px]";
 
   return (
     <div
-      className={`rounded-full font-semibold uppercase tracking-[0.2em] transition ${sizeClasses} ${
+      className={`rounded-full font-semibold uppercase tracking-[0.12em] transition ${sizeClasses} ${
         isActive === false ? "bg-surface-alt text-muted" : center.classes
       }`}
     >
