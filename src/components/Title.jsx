@@ -1,8 +1,10 @@
+import logo from "../assets/decathlon.png";
+
 export default function Title() {
   return (
     <div className="flex items-center gap-3 px-3">
       <img
-        src="/src/assets/decathlon.png"
+        src={logo}
         alt="Decathlon"
         className="h-12 w-12 object-contain rounded-[4px]"
       />
