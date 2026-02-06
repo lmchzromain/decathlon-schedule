@@ -16,68 +16,100 @@ const formatTime = (value) => {
 
 const formatDuration = (value) => {
   if (!value && value !== 0) {
-    return "—";
+    return "";
   }
 
   return `${value} min`;
 };
 
 const formatPlaces = (taken, max) => {
+  if (max == null || max === 0) {
+    return "";
+  }
+
   const safeTaken = taken ?? "—";
-  const safeMax = max ?? "—";
-  return `${safeTaken} / ${safeMax}`;
+  return `${safeTaken} / ${max}`;
 };
 
-const formatText = (value) => (value ? String(value) : "—");
+const getPlacesTone = (taken, max) => {
+  if (max == null || max === 0) {
+    return "text-slate-300";
+  }
+
+  if (taken == null) {
+    return "text-slate-200";
+  }
+
+  if (taken >= max) {
+    return "text-rose-400";
+  }
+
+  const remainingRatio = (max - taken) / max;
+  if (remainingRatio <= 0.2) {
+    return "text-orange-300";
+  }
+
+  return "text-slate-100";
+};
+
+const formatText = (value) => (value ? String(value) : "");
 
 const CENTER_META = {
-  5279: { label: "Lille", badge: "border-emerald-500/40 bg-emerald-500/10 text-emerald-200" },
-  5280: { label: "Marq", badge: "border-sky-500/40 bg-sky-500/10 text-sky-200" }
+  5279: { label: "Lille", badge: "bg-emerald-500/15 text-emerald-100" },
+  5280: { label: "Marq", badge: "bg-sky-500/15 text-sky-100" }
 };
 
 const getCenterMeta = (centerId) =>
   CENTER_META[centerId] ?? {
     label: `Centre ${formatText(centerId)}`,
-    badge: "border-slate-700/60 bg-slate-800/40 text-slate-200"
+    badge: "bg-slate-700/40 text-slate-100"
   };
 
 export default function Item({ item }) {
   const centerMeta = getCenterMeta(item?.center_id);
+  const activity = formatText(item?.activity);
+  const room = formatText(item?.room);
+  const employee = formatText(item?.employee);
+  const duration = formatDuration(item?.duration);
+  const places = formatPlaces(item?.placesTaken, item?.placesMax);
+  const placesTone = getPlacesTone(item?.placesTaken, item?.placesMax);
+  const isPast = item?.start ? new Date(item.start).getTime() < Date.now() : false;
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-4 text-sm text-slate-200">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="text-base font-semibold text-slate-100">{formatText(item?.activity)}</p>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
-              {formatTime(item?.start)}
-            </p>
-            <span
-              className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] ${centerMeta.badge}`}
-            >
-              {centerMeta.label}
-            </span>
-          </div>
-        </div>
-        <div className="rounded-full border border-slate-800 px-3 py-1 text-xs text-slate-300">
-          {formatDuration(item?.duration)}
-        </div>
+    <div
+      className={`relative flex items-start gap-4 py-4 text-sm text-slate-200 ${
+        isPast ? "opacity-50" : ""
+      }`}
+    >
+      <div className="w-16 flex-shrink-0 text-left">
+        <p className="text-lg font-semibold leading-tight text-slate-100">
+          {formatTime(item?.start)}
+        </p>
+        {duration && (
+          <span className="inline-flex items-center gap-1 text-[11px] text-slate-500">
+            {duration}
+          </span>
+        )}
       </div>
-      <div className="mt-4 grid gap-3 text-xs text-slate-300 sm:grid-cols-3">
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Salle</p>
-          <p className="mt-1 text-sm text-slate-200">{formatText(item?.room)}</p>
-        </div>
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Coach</p>
-          <p className="mt-1 text-sm text-slate-200">{formatText(item?.employee)}</p>
-        </div>
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Places</p>
-          <p className="mt-1 text-sm text-slate-200">
-            {formatPlaces(item?.placesTaken, item?.placesMax)}
-          </p>
+      <div className="flex-1 border-b border-slate-800/70 pb-4">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-base font-semibold leading-tight text-slate-100">
+              {activity || "Activite"}
+            </p>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-400">
+              {places && <span className={placesTone}>{places}</span>}
+              {places && (employee || room) && <span className="text-slate-500">•</span>}
+              {employee && <span className="text-slate-300">{employee}</span>}
+              {employee && room && <span className="text-slate-500">•</span>}
+              {room && <span className="text-slate-400">{room}</span>}
+            </div>
+          </div>
+          <span
+            className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] ${centerMeta.badge}`}
+          >
+            {centerMeta.label}
+          </span>
         </div>
       </div>
     </div>

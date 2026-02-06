@@ -166,7 +166,7 @@ export default function App() {
       <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-12 pb-40 sm:pb-28">
         <Title />
 
-        <div className="mt-8 rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+        <div className="mt-8">
           <List
             items={filteredItems}
             loading={loading}

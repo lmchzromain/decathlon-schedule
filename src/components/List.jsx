@@ -17,6 +17,14 @@ const formatSectionDate = (value) => {
   });
 };
 
+const capitalizeFirst = (value) => {
+  if (!value) {
+    return value;
+  }
+
+  return value.charAt(0).toUpperCase() + value.slice(1);
+};
+
 const groupByDay = (items) =>
   items.reduce((acc, item) => {
     const dayKey = item?.start ? new Date(item.start).toDateString() : "unknown";
@@ -24,7 +32,7 @@ const groupByDay = (items) =>
     return {
       ...acc,
       [dayKey]: {
-        label: formatSectionDate(item?.start),
+        label: capitalizeFirst(formatSectionDate(item?.start)),
         items: nextItems
       }
     };
@@ -34,21 +42,21 @@ const buildPlaceholders = (count) =>
   Array.from({ length: count }, (_, index) => ({ id: `placeholder-${index}` }));
 
 const PlaceholderItem = ({ label }) => (
-  <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-4 text-sm text-slate-200">
-    <div className="flex flex-wrap items-start justify-between gap-3">
-      <div className="space-y-2">
-        <div className="h-4 w-36 animate-pulse rounded bg-slate-800/80" />
-        <div className="h-3 w-24 animate-pulse rounded bg-slate-800/60" />
+  <div className="relative rounded-xl border border-slate-800/70 bg-slate-950/40 p-4 text-sm text-slate-200 shadow-sm shadow-slate-900/30">
+    <div className="absolute right-4 top-4 h-5 w-16 animate-pulse rounded-full bg-slate-800/70" />
+    <div className="flex items-start gap-4">
+      <div className="w-16 flex-shrink-0 space-y-2">
+        <div className="h-5 w-12 animate-pulse rounded bg-slate-800/80" />
+        <div className="h-3 w-10 animate-pulse rounded bg-slate-800/60" />
       </div>
-      <div className="h-6 w-16 animate-pulse rounded-full bg-slate-800/70" />
-    </div>
-    <div className="mt-4 grid gap-3 sm:grid-cols-3">
-      {[0, 1, 2].map((key) => (
-        <div key={key} className="space-y-2">
-          <div className="h-2 w-12 animate-pulse rounded bg-slate-800/60" />
-          <div className="h-3 w-24 animate-pulse rounded bg-slate-800/80" />
+      <div className="flex-1 space-y-3">
+        <div className="h-4 w-40 animate-pulse rounded bg-slate-800/80" />
+        <div className="flex flex-wrap gap-2">
+          {[0, 1, 2].map((key) => (
+            <div key={key} className="h-3 w-20 animate-pulse rounded bg-slate-800/60" />
+          ))}
         </div>
-      ))}
+      </div>
     </div>
     {label && <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-slate-500">{label}</p>}
   </div>
@@ -77,15 +85,21 @@ export default function List({ items, loading, error, loadingMore, hasMore, sent
   return (
     <div className="space-y-4">
       {sections.map(([key, section]) => (
-        <section key={key} className="space-y-3">
-          <div className="sticky top-0 z-10 -mx-4 bg-slate-900/95 px-4 py-2 backdrop-blur">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">
+        <section key={key} className="space-y-2">
+          <div className="sticky top-0 z-10 -mx-4 bg-slate-900/60 px-4 py-3 backdrop-blur">
+            <p className="text-base font-semibold text-slate-100 sm:text-lg">
               {section.label}
             </p>
           </div>
-          {section.items.map((item, index) => (
-            <Item key={`${item?.id ?? "item"}-${index}`} item={item} />
-          ))}
+          <div className="relative pl-6">
+            <div className="absolute bottom-0 left-2 top-0 w-px bg-slate-800/80" />
+            {section.items.map((item, index) => (
+              <div key={`${item?.id ?? "item"}-${index}`} className="relative">
+                <span className="absolute left-[3px] top-7 h-2.5 w-2.5 rounded-full border border-slate-600 bg-slate-900" />
+                <Item item={item} />
+              </div>
+            ))}
+          </div>
         </section>
       ))}
       {loadingMore && (
