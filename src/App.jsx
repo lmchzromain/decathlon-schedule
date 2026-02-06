@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Filters from "./components/Filters.jsx";
 import List from "./components/List.jsx";
+import Footer from "./components/Footer.jsx";
 import Title from "./components/Title.jsx";
 import { fetchBatch } from "./utils/planning.js";
 
@@ -186,6 +187,7 @@ export default function App() {
             sentinelRef={sentinelRef}
           />
         </div>
+        <Footer />
       </main>
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-bg/40 px-4 py-3 backdrop-blur-md sm:px-6">
         <div className="mx-auto w-full max-w-4xl">
