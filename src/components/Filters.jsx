@@ -24,7 +24,7 @@ export default function Filters({ selectedCenters, searchTerm, onToggleCenter, o
         value={searchTerm}
         onChange={(event) => onSearch(event.target.value)}
         placeholder="Rechercher une activite"
-        className="w-full min-w-[160px] flex-1 rounded-md border border-border bg-surface px-3 py-2 text-sm text-text placeholder:text-muted focus:outline-none"
+        className="w-full min-w-[160px] flex-1 rounded-md border border-border bg-surface px-3 py-2 text-base text-text placeholder:text-muted focus:outline-none"
       />
     </div>
   );
