@@ -4,7 +4,38 @@ import List from "./components/List.jsx";
 import Title from "./components/Title.jsx";
 import { fetchBatch } from "./utils/planning.js";
 
+const ALL_CENTERS = [5279, 5280];
+
+const parseCenters = (value) => {
+  if (value === null) {
+    return ALL_CENTERS;
+  }
+
+  if (value.trim() === "") {
+    return [];
+  }
+
+  return value
+    .split(",")
+    .map((entry) => Number(entry))
+    .filter((entry) => !Number.isNaN(entry))
+    .filter((entry, index, array) => array.indexOf(entry) === index)
+    .filter((entry) => ALL_CENTERS.includes(entry));
+};
+
+const getInitialFilters = () => {
+  const params = new URLSearchParams(window.location.search);
+  const centersParam = params.get("centers");
+  const searchParam = params.get("q");
+
+  return {
+    selectedCenters: parseCenters(centersParam),
+    searchTerm: searchParam ?? ""
+  };
+};
+
 export default function App() {
+  const initialFilters = useMemo(() => getInitialFilters(), []);
   const [items, setItems] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -12,8 +43,8 @@ export default function App() {
   const [pageIndex, setPageIndex] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const sentinelRef = useRef(null);
-  const [selectedCenters, setSelectedCenters] = useState([5279, 5280]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCenters, setSelectedCenters] = useState(initialFilters.selectedCenters);
+  const [searchTerm, setSearchTerm] = useState(initialFilters.searchTerm);
 
   const initialDate = useMemo(() => new Date(), []);
 
@@ -47,6 +78,24 @@ export default function App() {
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (selectedCenters.length > 0) {
+      params.set("centers", selectedCenters.join(","));
+    } else {
+      params.set("centers", "");
+    }
+
+    if (searchTerm.trim()) {
+      params.set("q", searchTerm.trim());
+    } else {
+      params.delete("q");
+    }
+
+    const nextUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState(null, "", nextUrl);
+  }, [selectedCenters, searchTerm]);
 
   useEffect(() => {
     if (!sentinelRef.current) {
