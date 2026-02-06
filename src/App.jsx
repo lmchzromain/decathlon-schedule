@@ -97,6 +97,7 @@ export default function App() {
     window.history.replaceState(null, "", nextUrl);
   }, [selectedCenters, searchTerm]);
 
+
   useEffect(() => {
     if (!sentinelRef.current) {
       return undefined;
@@ -159,7 +160,8 @@ export default function App() {
           return true;
         }
         const activity = item?.activity ? String(item.activity).toLowerCase() : "";
-        return activity.includes(normalizedSearch);
+        const coach = item?.employee ? String(item.employee).toLowerCase() : "";
+        return activity.includes(normalizedSearch) || coach.includes(normalizedSearch);
       });
   }, [sortedItems, selectedCenters, searchTerm]);
 
