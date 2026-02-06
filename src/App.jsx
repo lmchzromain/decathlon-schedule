@@ -116,14 +116,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-12">
+      <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-12 pb-40 sm:pb-28">
         <Title />
-        <Filters
-          selectedCenters={selectedCenters}
-          searchTerm={searchTerm}
-          onToggleCenter={toggleCenter}
-          onSearch={setSearchTerm}
-        />
 
         <div className="mt-8 rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
           <List
@@ -136,6 +130,16 @@ export default function App() {
           />
         </div>
       </main>
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-800 bg-slate-950/90 px-4 py-3 backdrop-blur sm:px-6">
+        <div className="mx-auto w-full max-w-4xl">
+          <Filters
+            selectedCenters={selectedCenters}
+            searchTerm={searchTerm}
+            onToggleCenter={toggleCenter}
+            onSearch={setSearchTerm}
+          />
+        </div>
+      </div>
     </div>
   );
 }

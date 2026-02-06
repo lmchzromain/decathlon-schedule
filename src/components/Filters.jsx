@@ -5,7 +5,7 @@ const CENTER_OPTIONS = [
 
 export default function Filters({ selectedCenters, searchTerm, onToggleCenter, onSearch }) {
   return (
-    <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+    <div className="flex flex-col gap-4 rounded-2xl border border-slate-800 bg-slate-900/60 p-4 shadow-lg shadow-slate-900/40">
       <div className="flex flex-wrap items-center gap-2">
         {CENTER_OPTIONS.map((center) => {
           const isActive = selectedCenters.includes(center.id);
