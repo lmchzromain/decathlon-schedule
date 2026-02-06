@@ -41,31 +41,14 @@ const groupByDay = (items) =>
 const buildPlaceholders = (count) =>
   Array.from({ length: count }, (_, index) => ({ id: `placeholder-${index}` }));
 
-const PlaceholderItem = ({ label }) => (
-  <div className="relative rounded-xl border border-slate-800/70 bg-slate-950/40 p-4 text-sm text-slate-200 shadow-sm shadow-slate-900/30">
-    <div className="absolute right-4 top-4 h-5 w-16 animate-pulse rounded-full bg-slate-800/70" />
-    <div className="flex items-start gap-4">
-      <div className="w-16 flex-shrink-0 space-y-2">
-        <div className="h-5 w-12 animate-pulse rounded bg-slate-800/80" />
-        <div className="h-3 w-10 animate-pulse rounded bg-slate-800/60" />
-      </div>
-      <div className="flex-1 space-y-3">
-        <div className="h-4 w-40 animate-pulse rounded bg-slate-800/80" />
-        <div className="flex flex-wrap gap-2">
-          {[0, 1, 2].map((key) => (
-            <div key={key} className="h-3 w-20 animate-pulse rounded bg-slate-800/60" />
-          ))}
-        </div>
-      </div>
-    </div>
-    {label && <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-slate-500">{label}</p>}
-  </div>
+const PlaceholderItem = () => (
+  <div className="h-16 rounded-md bg-slate-100" />
 );
 
 export default function List({ items, loading, error, loadingMore, hasMore, sentinelRef }) {
   if (loading) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-3">
         {buildPlaceholders(4).map((placeholder) => (
           <PlaceholderItem key={placeholder.id} />
         ))}
@@ -74,44 +57,37 @@ export default function List({ items, loading, error, loadingMore, hasMore, sent
   }
 
   if (error) {
-    return <p className="text-rose-300">Erreur: {error}</p>;
+    return <p className="text-rose-600">Erreur: {error}</p>;
   }
 
   const sections = Object.entries(groupByDay(items));
   if (sections.length === 0) {
-    return <p className="text-sm text-slate-400">Aucun cours pour les filtres selectionnes.</p>;
+    return <p className="text-sm text-slate-500">Aucun cours pour les filtres selectionnes.</p>;
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {sections.map(([key, section]) => (
-        <section key={key} className="space-y-2">
-          <div className="sticky top-0 z-10 -mx-4 bg-slate-900/60 px-4 py-3 backdrop-blur">
-            <p className="text-base font-semibold text-slate-100 sm:text-lg px-2">
-              {section.label}
-            </p>
+        <section key={key} className="space-y-3">
+          <div className="sticky top-0 bg-white py-2">
+            <p className="text-base font-semibold text-slate-900">{section.label}</p>
           </div>
-          <div className="relative">
+          <div className="divide-y divide-slate-200">
             {section.items.map((item, index) => (
-              <div key={`${item?.id ?? "item"}-${index}`} className="relative">
-                <Item item={item} />
-                {index < section.items.length - 1 && (
-                  <div className="ml-6 h-px bg-slate-800/70" />
-                )}
-              </div>
+              <Item key={`${item?.id ?? "item"}-${index}`} item={item} />
             ))}
           </div>
         </section>
       ))}
       {loadingMore && (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {buildPlaceholders(2).map((placeholder) => (
-            <PlaceholderItem key={placeholder.id} label="Chargement..." />
+            <PlaceholderItem key={placeholder.id} />
           ))}
         </div>
       )}
       {hasMore && (
-        <div className="mt-2 flex items-center justify-center text-xs text-slate-400">
+        <div className="text-xs text-slate-500">
           {loadingMore ? "Chargement des jours suivants..." : "Scroll pour charger la suite"}
         </div>
       )}

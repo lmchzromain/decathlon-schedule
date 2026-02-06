@@ -170,8 +170,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_10%_-10%,rgba(54,67,186,0.2),transparent_60%),linear-gradient(180deg,#0b0f1f_0%,#11172f_100%)] text-slate-100">
-      <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-4 py-6 pb-40 sm:pb-28">
+    <div className="min-h-screen">
+      <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-4 py-6 pb-28">
         <Title />
 
         <div className="mt-8">
@@ -185,7 +185,7 @@ export default function App() {
           />
         </div>
       </main>
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-800 bg-slate-950/90 px-4 py-3 backdrop-blur sm:px-6">
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/90 px-4 py-3 backdrop-blur sm:px-6">
         <div className="mx-auto w-full max-w-4xl">
           <Filters
             selectedCenters={selectedCenters}
