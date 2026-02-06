@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import Filters from "./components/Filters.jsx";
 import List from "./components/List.jsx";
 import Title from "./components/Title.jsx";
 import { fetchBatch } from "./utils/planning.js";
@@ -9,7 +10,10 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const sentinelRef = useRef(null);
+  const [selectedCenters, setSelectedCenters] = useState([5279, 5280]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const initialDate = useMemo(() => new Date(), []);
 
@@ -24,6 +28,7 @@ export default function App() {
         const firstBatch = await fetchBatch(0, initialDate);
         if (isMounted) {
           setItems(firstBatch);
+          setHasMore(firstBatch.length > 0);
         }
       } catch (err) {
         if (isMounted) {
@@ -50,7 +55,7 @@ export default function App() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting || loadingMore || loading) {
+        if (!entry.isIntersecting || loadingMore || loading || !hasMore) {
           return;
         }
 
@@ -61,6 +66,7 @@ export default function App() {
           .then((nextBatch) => {
             setItems((prev) => [...prev, ...nextBatch]);
             setPageIndex(nextIndex);
+            setHasMore(nextBatch.length > 0);
           })
           .catch((err) => {
             setError(err instanceof Error ? err.message : "Erreur inconnue");
@@ -77,7 +83,7 @@ export default function App() {
     return () => {
       observer.disconnect();
     };
-  }, [loadingMore, loading, pageIndex]);
+  }, [loadingMore, loading, pageIndex, hasMore]);
 
   const sortedItems = useMemo(() => {
     return [...items].sort((a, b) => {
@@ -87,17 +93,45 @@ export default function App() {
     });
   }, [items]);
 
+  const filteredItems = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    return sortedItems
+      .filter((item) => selectedCenters.includes(item?.center_id))
+      .filter((item) => {
+        if (!normalizedSearch) {
+          return true;
+        }
+        const activity = item?.activity ? String(item.activity).toLowerCase() : "";
+        return activity.includes(normalizedSearch);
+      });
+  }, [sortedItems, selectedCenters, searchTerm]);
+
+  const toggleCenter = (centerId) => {
+    setSelectedCenters((prev) =>
+      prev.includes(centerId)
+        ? prev.filter((id) => id !== centerId)
+        : [...prev, centerId]
+    );
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-12">
         <Title />
+        <Filters
+          selectedCenters={selectedCenters}
+          searchTerm={searchTerm}
+          onToggleCenter={toggleCenter}
+          onSearch={setSearchTerm}
+        />
 
         <div className="mt-8 rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
           <List
-            items={sortedItems}
+            items={filteredItems}
             loading={loading}
             error={error}
             loadingMore={loadingMore}
+            hasMore={hasMore}
             sentinelRef={sentinelRef}
           />
         </div>

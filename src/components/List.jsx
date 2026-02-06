@@ -56,7 +56,7 @@ const PlaceholderItem = ({ label }) => (
   </div>
 );
 
-export default function List({ items, loading, error, loadingMore, sentinelRef }) {
+export default function List({ items, loading, error, loadingMore, hasMore, sentinelRef }) {
   if (loading) {
     return (
       <div className="space-y-4">
@@ -72,6 +72,9 @@ export default function List({ items, loading, error, loadingMore, sentinelRef }
   }
 
   const sections = Object.entries(groupByDay(items));
+  if (sections.length === 0) {
+    return <p className="text-sm text-slate-400">Aucun cours pour les filtres selectionnes.</p>;
+  }
 
   return (
     <div className="space-y-4">
@@ -94,9 +97,11 @@ export default function List({ items, loading, error, loadingMore, sentinelRef }
           ))}
         </div>
       )}
-      <div className="mt-2 flex items-center justify-center text-xs text-slate-400">
-        {loadingMore ? "Chargement des jours suivants..." : "Scroll pour charger la suite"}
-      </div>
+      {hasMore && (
+        <div className="mt-2 flex items-center justify-center text-xs text-slate-400">
+          {loadingMore ? "Chargement des jours suivants..." : "Scroll pour charger la suite"}
+        </div>
+      )}
       <div ref={sentinelRef} className="h-8" />
     </div>
   );
