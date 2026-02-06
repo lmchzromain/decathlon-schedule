@@ -12,7 +12,7 @@ export default function Title() {
         <p className="text-xs font-semibold leading-none uppercase tracking-[0.3em]">
           Decathlon Fitness Club
         </p>
-        <h1 className="mt-2 text-2xl font-black leading-none sm:text-3xl">Planning des cours</h1>
+        <h1 className="mt-1 text-2xl font-black leading-none">Planning des cours</h1>
       </div>
     </div>
   );
