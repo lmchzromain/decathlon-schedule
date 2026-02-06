@@ -45,7 +45,7 @@ export default function Item({ item }) {
 
   return (
     <div
-      className={`flex gap-4 rounded-md px-2 py-3 transition ${
+      className={`flex min-w-0 gap-4 rounded-md px-2 py-3 transition ${
         isPast ? "opacity-50" : "hover:bg-surface-alt"
       }`}
     >
@@ -53,12 +53,14 @@ export default function Item({ item }) {
         <p className="text-lg font-semibold leading-tight">{formatTime(item?.start)}</p>
         {duration && <p className="text-xs text-muted">{duration}</p>}
       </div>
-      <div className="flex-1">
-        <div className="flex items-start justify-between gap-3">
-          <p className="text-base font-semibold leading-tight truncate">
+      <div className="flex-1 min-w-0">
+        <div className="flex min-w-0 items-start justify-between gap-3">
+          <p className="min-w-0 flex-1 max-w-full text-base font-semibold leading-tight truncate">
             {activity || "Activite"}
           </p>
-          <CenterBadge centerId={item?.center_id} size="sm" />
+          <div className="flex-shrink-0">
+            <CenterBadge centerId={item?.center_id} size="sm" />
+          </div>
         </div>
         <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted">
           {places && <span className="text-text">{places}</span>}
