@@ -42,7 +42,7 @@ const groupByDay = (items) =>
 const buildPlaceholders = (count) =>
   Array.from({ length: count }, (_, index) => ({ id: `placeholder-${index}` }));
 
-const PlaceholderItem = () => <div className="h-16 rounded-md bg-slate-200 m-3" />;
+const PlaceholderItem = () => <div className="m-3 h-16 rounded-md bg-surface-alt" />;
 
 const SectionHeader = ({ label }) => {
   const sentinelRef = useRef(null);
