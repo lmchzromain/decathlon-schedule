@@ -2,5 +2,15 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  plugins: [react()]
+  plugins: [react()],
+  server: {
+    proxy: {
+      "/heitzfit": {
+        target: "https://app.heitzfit.com",
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/heitzfit/, "")
+      }
+    }
+  }
 });
