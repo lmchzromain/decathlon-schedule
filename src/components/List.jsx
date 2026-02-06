@@ -30,9 +30,41 @@ const groupByDay = (items) =>
     };
   }, {});
 
+const buildPlaceholders = (count) =>
+  Array.from({ length: count }, (_, index) => ({ id: `placeholder-${index}` }));
+
+const PlaceholderItem = ({ label }) => (
+  <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-4 text-sm text-slate-200">
+    <div className="flex flex-wrap items-start justify-between gap-3">
+      <div className="space-y-2">
+        <div className="h-4 w-36 animate-pulse rounded bg-slate-800/80" />
+        <div className="h-3 w-24 animate-pulse rounded bg-slate-800/60" />
+      </div>
+      <div className="h-6 w-16 animate-pulse rounded-full bg-slate-800/70" />
+    </div>
+    <div className="mt-4 grid gap-3 sm:grid-cols-3">
+      {[0, 1, 2].map((key) => (
+        <div key={key} className="space-y-2">
+          <div className="h-2 w-12 animate-pulse rounded bg-slate-800/60" />
+          <div className="h-3 w-24 animate-pulse rounded bg-slate-800/80" />
+        </div>
+      ))}
+    </div>
+    {label && (
+      <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-slate-500">{label}</p>
+    )}
+  </div>
+);
+
 export default function List({ items, loading, error, loadingMore, sentinelRef }) {
   if (loading) {
-    return <p className="text-slate-300">Chargement en cours...</p>;
+    return (
+      <div className="space-y-4">
+        {buildPlaceholders(4).map((placeholder) => (
+          <PlaceholderItem key={placeholder.id} />
+        ))}
+      </div>
+    );
   }
 
   if (error) {
@@ -55,6 +87,13 @@ export default function List({ items, loading, error, loadingMore, sentinelRef }
           ))}
         </section>
       ))}
+      {loadingMore && (
+        <div className="space-y-4">
+          {buildPlaceholders(2).map((placeholder) => (
+            <PlaceholderItem key={placeholder.id} label="Chargement..." />
+          ))}
+        </div>
+      )}
       <div className="mt-2 flex items-center justify-center text-xs text-slate-400">
         {loadingMore ? "Chargement des jours suivants..." : "Scroll pour charger la suite"}
       </div>
