@@ -5,6 +5,7 @@
 @layer base {
   :root {
     color-scheme: light dark;
+    --keyboard-offset: 0px;
     --color-primary: 54 67 186;
     --color-bg: 250 250 252;
     --color-surface: 247 248 252;

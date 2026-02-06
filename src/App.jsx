@@ -98,6 +98,56 @@ export default function App() {
     window.history.replaceState(null, "", nextUrl);
   }, [selectedCenters, searchTerm]);
 
+  useEffect(() => {
+    const root = document.documentElement;
+    const viewport = window.visualViewport;
+    let rafId = null;
+
+    const updateOffset = () => {
+      if (!viewport) {
+        root.style.setProperty("--keyboard-offset", "0px");
+        return;
+      }
+
+      const offset = Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop);
+      root.style.setProperty("--keyboard-offset", `${offset}px`);
+    };
+
+    const start = () => {
+      if (rafId) {
+        return;
+      }
+      const loop = () => {
+        updateOffset();
+        rafId = requestAnimationFrame(loop);
+      };
+      loop();
+    };
+
+    const stop = () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+      root.style.setProperty("--keyboard-offset", "0px");
+    };
+
+    updateOffset();
+    viewport?.addEventListener("resize", updateOffset);
+    viewport?.addEventListener("scroll", updateOffset);
+    window.addEventListener("focusin", start);
+    window.addEventListener("focusout", stop);
+    window.addEventListener("orientationchange", updateOffset);
+
+    return () => {
+      viewport?.removeEventListener("resize", updateOffset);
+      viewport?.removeEventListener("scroll", updateOffset);
+      window.removeEventListener("focusin", start);
+      window.removeEventListener("focusout", stop);
+      window.removeEventListener("orientationchange", updateOffset);
+      stop();
+    };
+  }, []);
 
   useEffect(() => {
     if (!sentinelRef.current) {
@@ -189,7 +239,14 @@ export default function App() {
         </div>
         <Footer />
       </main>
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-bg/40 px-3 py-3 backdrop-blur-md sm:px-6">
+      <div
+        className="fixed inset-x-0 z-20 bg-bg/40 backdrop-blur-md"
+        style={{ bottom: 0, height: "var(--keyboard-offset)" }}
+      />
+      <div
+        className="fixed inset-x-0 z-30 border-t border-border bg-bg/40 px-3 py-3 backdrop-blur-md sm:px-6"
+        style={{ bottom: "var(--keyboard-offset)" }}
+      >
         <div className="mx-auto w-full max-w-4xl">
           <Filters
             selectedCenters={selectedCenters}
