@@ -97,7 +97,7 @@ export default function List({ items, loading, error, loadingMore, hasMore, sent
 
   const sections = Object.entries(groupByDay(items));
   if (sections.length === 0) {
-    return <p className="text-sm text-muted text-center py-4">Aucun cours pour les filtres selectionnes.</p>;
+    return <p className="text-sm text-muted text-center py-8">Aucun cours pour les filtres selectionnes.</p>;
   }
 
   return (
