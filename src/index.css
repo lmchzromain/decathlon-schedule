@@ -25,13 +25,14 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: 12 14 23;
-    --color-surface: 20 23 35;
-    --color-surface-alt: 26 30 44;
+    --color-primary: 125 139 255;
+    --color-bg: 9 12 24;
+    --color-surface: 15 20 38;
+    --color-surface-alt: 20 26 46;
     --color-text: 226 232 240;
     --color-muted: 148 163 184;
-    --color-border: 51 65 85;
-    --color-center-lille: 110 231 183;
-    --color-center-marq: 125 211 252;
+    --color-border: 55 65 85;
+    --color-center-lille: 88 199 150;
+    --color-center-marq: 96 138 233;
   }
 }
