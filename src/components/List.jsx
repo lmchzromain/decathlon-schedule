@@ -42,7 +42,7 @@ const groupByDay = (items) =>
 const buildPlaceholders = (count) =>
   Array.from({ length: count }, (_, index) => ({ id: `placeholder-${index}` }));
 
-const PlaceholderItem = () => <div className="h-16 rounded-md bg-slate-200 m-2" />;
+const PlaceholderItem = () => <div className="h-16 rounded-md bg-slate-200 m-3" />;
 
 const SectionHeader = ({ label }) => {
   const sentinelRef = useRef(null);
@@ -70,7 +70,7 @@ const SectionHeader = ({ label }) => {
     <>
       <div ref={sentinelRef} className="h-0" />
       <div
-        className={`sticky z-10 top-0 border-b border-border bg-bg/60 p-2 backdrop-blur-md ${
+        className={`sticky z-10 top-0 border-b border-border bg-bg/60 px-3 py-2 backdrop-blur-md ${
           isStuck ? "shadow-sm shadow-black/10" : ""
         }`}
       >
