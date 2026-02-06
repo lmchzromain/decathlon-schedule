@@ -77,8 +77,8 @@ export default function Item({ item }) {
 
   return (
     <div
-      className={`relative flex items-start gap-4 py-4 text-sm text-slate-200 ${
-        isPast ? "opacity-50" : ""
+      className={`relative flex items-start gap-4 rounded-lg py-4 px-2 text-sm text-slate-200 transition ${
+        isPast ? "opacity-50" : "hover:bg-white/10"
       }`}
     >
       <div className="w-16 flex-shrink-0 text-left">
@@ -91,25 +91,23 @@ export default function Item({ item }) {
           </span>
         )}
       </div>
-      <div className="flex-1 border-b border-slate-800/70 pb-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-base font-semibold leading-tight text-slate-100">
-              {activity || "Activite"}
-            </p>
-            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-400">
-              {places && <span className={placesTone}>{places}</span>}
-              {places && (employee || room) && <span className="text-slate-500">•</span>}
-              {employee && <span className="text-slate-300">{employee}</span>}
-              {employee && room && <span className="text-slate-500">•</span>}
-              {room && <span className="text-slate-400">{room}</span>}
-            </div>
-          </div>
+      <div className="flex-1 pb-4">
+        <div className="flex items-start justify-between gap-3">
+          <p className="text-base font-semibold leading-tight text-slate-100 line-clamp-2">
+            {activity || "Activite"}
+          </p>
           <span
             className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] ${centerMeta.badge}`}
           >
             {centerMeta.label}
           </span>
+        </div>
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-400">
+          {places && <span className={placesTone}>{places}</span>}
+          {places && (employee || room) && <span className="text-slate-500">•</span>}
+          {employee && <span className="text-slate-300">{employee}</span>}
+          {employee && room && <span className="text-slate-500">•</span>}
+          {room && <span className="text-slate-400">{room}</span>}
         </div>
       </div>
     </div>

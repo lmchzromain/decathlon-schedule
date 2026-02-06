@@ -87,16 +87,17 @@ export default function List({ items, loading, error, loadingMore, hasMore, sent
       {sections.map(([key, section]) => (
         <section key={key} className="space-y-2">
           <div className="sticky top-0 z-10 -mx-4 bg-slate-900/60 px-4 py-3 backdrop-blur">
-            <p className="text-base font-semibold text-slate-100 sm:text-lg">
+            <p className="text-base font-semibold text-slate-100 sm:text-lg px-2">
               {section.label}
             </p>
           </div>
-          <div className="relative pl-6">
-            <div className="absolute bottom-0 left-2 top-0 w-px bg-slate-800/80" />
+          <div className="relative">
             {section.items.map((item, index) => (
               <div key={`${item?.id ?? "item"}-${index}`} className="relative">
-                <span className="absolute left-[3px] top-7 h-2.5 w-2.5 rounded-full border border-slate-600 bg-slate-900" />
                 <Item item={item} />
+                {index < section.items.length - 1 && (
+                  <div className="ml-6 h-px bg-slate-800/70" />
+                )}
               </div>
             ))}
           </div>
