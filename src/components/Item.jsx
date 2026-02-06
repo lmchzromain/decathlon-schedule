@@ -48,9 +48,7 @@ export default function Item({ item }) {
     <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-4 text-sm text-slate-200">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-base font-semibold text-slate-100">
-            {formatText(item?.activity)}
-          </p>
+          <p className="text-base font-semibold text-slate-100">{formatText(item?.activity)}</p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
               {formatTime(item?.start)}

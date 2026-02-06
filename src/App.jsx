@@ -157,9 +157,7 @@ export default function App() {
 
   const toggleCenter = (centerId) => {
     setSelectedCenters((prev) =>
-      prev.includes(centerId)
-        ? prev.filter((id) => id !== centerId)
-        : [...prev, centerId]
+      prev.includes(centerId) ? prev.filter((id) => id !== centerId) : [...prev, centerId]
     );
   };
 

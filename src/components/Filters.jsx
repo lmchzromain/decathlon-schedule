@@ -15,9 +15,7 @@ export default function Filters({ selectedCenters, searchTerm, onToggleCenter, o
               type="button"
               onClick={() => onToggleCenter(center.id)}
               className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] transition ${
-                isActive
-                  ? center.badge
-                  : "border-slate-700/60 bg-slate-800/40 text-slate-400"
+                isActive ? center.badge : "border-slate-700/60 bg-slate-800/40 text-slate-400"
               }`}
             >
               {center.label}
@@ -26,7 +24,10 @@ export default function Filters({ selectedCenters, searchTerm, onToggleCenter, o
         })}
       </div>
       <div className="flex flex-col gap-2">
-        <label htmlFor="activity-search" className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+        <label
+          htmlFor="activity-search"
+          className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400"
+        >
           Rechercher une activite
         </label>
         <input

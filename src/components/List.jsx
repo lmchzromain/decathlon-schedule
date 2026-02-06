@@ -50,9 +50,7 @@ const PlaceholderItem = ({ label }) => (
         </div>
       ))}
     </div>
-    {label && (
-      <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-slate-500">{label}</p>
-    )}
+    {label && <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-slate-500">{label}</p>}
   </div>
 );
 
