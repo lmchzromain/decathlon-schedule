@@ -46,11 +46,14 @@ const formatTitleCase = (value) => {
     return "";
   }
 
-  return cleaned
+  const words = cleaned
     .toLowerCase()
     .split(/\s+/)
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+
+  return words
+    .join(" ")
+    .replace(/(\d+)([a-z])/g, (_, digits, letter) => `${digits}${letter.toUpperCase()}`);
 };
 
 const getPlacesTone = (taken, max) => {
