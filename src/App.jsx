@@ -144,7 +144,15 @@ export default function App() {
 
   const filteredItems = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
+    const cutoff = Date.now() - 90 * 60 * 1000;
     return sortedItems
+      .filter((item) => {
+        if (!item?.start) {
+          return false;
+        }
+        const startTime = new Date(item.start).getTime();
+        return Number.isNaN(startTime) ? false : startTime >= cutoff;
+      })
       .filter((item) => selectedCenters.includes(item?.center_id))
       .filter((item) => {
         if (!normalizedSearch) {
