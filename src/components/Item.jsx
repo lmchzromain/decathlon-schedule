@@ -1,4 +1,4 @@
-const formatDateTime = (value) => {
+const formatTime = (value) => {
   if (!value) {
     return "—";
   }
@@ -8,10 +8,7 @@ const formatDateTime = (value) => {
     return String(value);
   }
 
-  return date.toLocaleString("fr-FR", {
-    weekday: "short",
-    day: "2-digit",
-    month: "short",
+  return date.toLocaleTimeString("fr-FR", {
     hour: "2-digit",
     minute: "2-digit"
   });
@@ -56,7 +53,7 @@ export default function Item({ item }) {
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
-              {formatDateTime(item?.start)}
+              {formatTime(item?.start)}
             </p>
             <span
               className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] ${centerMeta.badge}`}
