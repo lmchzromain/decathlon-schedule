@@ -70,6 +70,9 @@ const getPlacesTone = (taken, max) => {
   return "text-text";
 };
 
+const getActivityId = (item) =>
+  item?.id ?? item?.activityId ?? item?.activity_id ?? item?.courseId ?? item?.course_id;
+
 export default function Item({ item }) {
   const activity = formatText(item?.activity);
   const room = formatTitleCase(item?.room);
@@ -78,12 +81,17 @@ export default function Item({ item }) {
   const places = formatPlaces(item?.placesTaken, item?.placesMax);
   const placesTone = getPlacesTone(item?.placesTaken, item?.placesMax);
   const isPast = item?.start ? new Date(item.start).getTime() < Date.now() : false;
+  const activityId = getActivityId(item);
+  const activityLink = `https://app.heitzfit.com/#/planning/${activityId}`;
 
   return (
-    <div
+    <a
       className={`flex min-w-0 gap-4 px-3 py-3 transition ${
         isPast ? "opacity-50" : "hover:bg-surface-alt"
       }`}
+      href={activityLink}
+      target="_blank"
+      rel="noopener noreferrer"
     >
       <div className="w-16 flex-shrink-0">
         <p className="text-lg font-semibold leading-tight">{formatTime(item?.start)}</p>
@@ -111,6 +119,6 @@ export default function Item({ item }) {
           {room && <span>{room}</span>}
         </div>
       </div>
-    </div>
+    </a>
   );
 }
