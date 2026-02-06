@@ -36,7 +36,7 @@ export default function Filters({ selectedCenters, searchTerm, onToggleCenter, o
           value={searchTerm}
           onChange={(event) => onSearch(event.target.value)}
           placeholder="Yoga, Cross training..."
-          className="w-full rounded-xl border border-slate-800 bg-slate-950/50 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-emerald-400/60 focus:outline-none"
+          className="w-full rounded-xl border border-slate-800 bg-slate-950/50 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-brand-primary focus:outline-none"
         />
       </div>
     </div>

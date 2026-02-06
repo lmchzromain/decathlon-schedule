@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
-}
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
 
-body {
-  font-family: "Space Grotesk", system-ui, sans-serif;
+  body {
+    @apply font-sans text-slate-100;
+  }
 }

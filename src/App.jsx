@@ -162,7 +162,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_10%_-10%,rgba(54,67,186,0.2),transparent_60%),linear-gradient(180deg,#0b0f1f_0%,#11172f_100%)] text-slate-100">
       <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-12 pb-40 sm:pb-28">
         <Title />
 
