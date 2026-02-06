@@ -81,20 +81,16 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (selectedCenters.length > 0) {
-      params.set("centers", selectedCenters.join(","));
-    } else {
-      params.set("centers", "");
-    }
+    const centersValue = selectedCenters.join(",");
+    const parts = [];
+
+    parts.push(`centers=${centersValue}`);
 
     if (searchTerm.trim()) {
-      params.set("q", searchTerm.trim());
-    } else {
-      params.delete("q");
+      parts.push(`q=${encodeURIComponent(searchTerm.trim())}`);
     }
 
-    const nextUrl = `${window.location.pathname}?${params.toString()}`;
+    const nextUrl = `${window.location.pathname}?${parts.join("&")}`;
     window.history.replaceState(null, "", nextUrl);
   }, [selectedCenters, searchTerm]);
 
