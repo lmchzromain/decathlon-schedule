@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/heitzfit/:path*",
+      "destination": "https://app.heitzfit.com/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
