@@ -4,12 +4,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          primary: "rgb(var(--color-primary) / <alpha-value>)"
-        },
+        primary: "rgb(var(--color-primary) / <alpha-value>)",
         bg: "rgb(var(--color-bg) / <alpha-value>)",
         surface: "rgb(var(--color-surface) / <alpha-value>)",
-        surfaceAlt: "rgb(var(--color-surface-alt) / <alpha-value>)",
+        "surface-alt": "rgb(var(--color-surface-alt) / <alpha-value>)",
         text: "rgb(var(--color-text) / <alpha-value>)",
         muted: "rgb(var(--color-muted) / <alpha-value>)",
         border: "rgb(var(--color-border) / <alpha-value>)"

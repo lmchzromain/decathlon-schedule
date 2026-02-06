@@ -170,8 +170,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[rgb(var(--color-bg))] text-[rgb(var(--color-text))]">
-      <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-4 py-6 pb-28">
+    <div className="min-h-screen bg-bg text-text">
+      <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-0 py-6 pb-28 ">
         <Title />
 
         <div className="mt-8">
@@ -185,7 +185,7 @@ export default function App() {
           />
         </div>
       </main>
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[rgb(var(--color-border))] bg-[rgb(var(--color-bg))]/90 px-4 py-3 backdrop-blur sm:px-6">
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-bg/40 px-4 py-3 backdrop-blur-md sm:px-6">
         <div className="mx-auto w-full max-w-4xl">
           <Filters
             selectedCenters={selectedCenters}

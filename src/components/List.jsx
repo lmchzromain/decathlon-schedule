@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import Item from "./Item.jsx";
 
 const formatSectionDate = (value) => {
@@ -41,9 +42,43 @@ const groupByDay = (items) =>
 const buildPlaceholders = (count) =>
   Array.from({ length: count }, (_, index) => ({ id: `placeholder-${index}` }));
 
-const PlaceholderItem = () => (
-  <div className="h-16 rounded-md bg-[rgb(var(--color-surface))]" />
-);
+const PlaceholderItem = () => <div className="h-16 rounded-md bg-surface" />;
+
+const SectionHeader = ({ label }) => {
+  const sentinelRef = useRef(null);
+  const [isStuck, setIsStuck] = useState(false);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsStuck(entry.intersectionRatio === 0);
+      },
+      { threshold: [0, 1] }
+    );
+
+    observer.observe(sentinel);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <>
+      <div ref={sentinelRef} className="h-0" />
+      <div
+        className={`sticky top-0 border-b border-border bg-bg/60 p-2 backdrop-blur-md ${
+          isStuck ? "shadow-sm shadow-black/10" : ""
+        }`}
+      >
+        <p className="text-base font-black text-primary">{label}</p>
+      </div>
+    </>
+  );
+};
 
 export default function List({ items, loading, error, loadingMore, hasMore, sentinelRef }) {
   if (loading) {
@@ -62,23 +97,15 @@ export default function List({ items, loading, error, loadingMore, hasMore, sent
 
   const sections = Object.entries(groupByDay(items));
   if (sections.length === 0) {
-    return (
-      <p className="text-sm text-[rgb(var(--color-muted))]">
-        Aucun cours pour les filtres selectionnes.
-      </p>
-    );
+    return <p className="text-sm text-muted">Aucun cours pour les filtres selectionnes.</p>;
   }
 
   return (
     <div className="space-y-6">
       {sections.map(([key, section]) => (
         <section key={key} className="space-y-3">
-          <div className="sticky top-0 bg-[rgb(var(--color-bg))] py-2">
-            <p className="text-base font-semibold text-[rgb(var(--color-text))]">
-              {section.label}
-            </p>
-          </div>
-          <div className="divide-y divide-[rgb(var(--color-border))]">
+          <SectionHeader label={section.label} />
+          <div className="divide-y divide-border">
             {section.items.map((item, index) => (
               <Item key={`${item?.id ?? "item"}-${index}`} item={item} />
             ))}
@@ -93,7 +120,7 @@ export default function List({ items, loading, error, loadingMore, hasMore, sent
         </div>
       )}
       {hasMore && (
-        <div className="text-xs text-[rgb(var(--color-muted))]">
+        <div className="text-xs text-muted">
           {loadingMore ? "Chargement des jours suivants..." : "Scroll pour charger la suite"}
         </div>
       )}

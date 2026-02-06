@@ -5,10 +5,11 @@
 @layer base {
   :root {
     color-scheme: light dark;
-    --color-bg: 255 255 255;
+    --color-primary: 54 67 186;
+    --color-bg: 250 250 252;
     --color-surface: 247 248 252;
     --color-surface-alt: 240 242 248;
-    --color-text: 15 23 42;
+    --color-text: 30 41 59;
     --color-muted: 100 116 139;
     --color-border: 226 232 240;
   }
