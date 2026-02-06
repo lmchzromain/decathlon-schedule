@@ -42,7 +42,7 @@ const groupByDay = (items) =>
 const buildPlaceholders = (count) =>
   Array.from({ length: count }, (_, index) => ({ id: `placeholder-${index}` }));
 
-const PlaceholderItem = () => <div className="h-16 rounded-md bg-surface" />;
+const PlaceholderItem = () => <div className="h-16 rounded-md bg-slate-200 m-2" />;
 
 const SectionHeader = ({ label }) => {
   const sentinelRef = useRef(null);
@@ -70,7 +70,7 @@ const SectionHeader = ({ label }) => {
     <>
       <div ref={sentinelRef} className="h-0" />
       <div
-        className={`sticky top-0 border-b border-border bg-bg/60 p-2 backdrop-blur-md ${
+        className={`sticky z-10 top-0 border-b border-border bg-bg/60 p-2 backdrop-blur-md ${
           isStuck ? "shadow-sm shadow-black/10" : ""
         }`}
       >
@@ -83,8 +83,8 @@ const SectionHeader = ({ label }) => {
 export default function List({ items, loading, error, loadingMore, hasMore, sentinelRef }) {
   if (loading) {
     return (
-      <div className="space-y-3">
-        {buildPlaceholders(4).map((placeholder) => (
+      <div>
+        {buildPlaceholders(20).map((placeholder) => (
           <PlaceholderItem key={placeholder.id} />
         ))}
       </div>
@@ -97,15 +97,15 @@ export default function List({ items, loading, error, loadingMore, hasMore, sent
 
   const sections = Object.entries(groupByDay(items));
   if (sections.length === 0) {
-    return <p className="text-sm text-muted">Aucun cours pour les filtres selectionnes.</p>;
+    return <p className="text-sm text-muted text-center py-4">Aucun cours pour les filtres selectionnes.</p>;
   }
 
   return (
     <div className="space-y-6">
       {sections.map(([key, section]) => (
-        <section key={key} className="space-y-3">
+        <section key={key}>
           <SectionHeader label={section.label} />
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-border mt-0">
             {section.items.map((item, index) => (
               <Item key={`${item?.id ?? "item"}-${index}`} item={item} />
             ))}
@@ -113,15 +113,15 @@ export default function List({ items, loading, error, loadingMore, hasMore, sent
         </section>
       ))}
       {loadingMore && (
-        <div className="space-y-3">
-          {buildPlaceholders(2).map((placeholder) => (
+        <div>
+          {buildPlaceholders(20).map((placeholder) => (
             <PlaceholderItem key={placeholder.id} />
           ))}
         </div>
       )}
       {hasMore && (
         <div className="text-xs text-muted">
-          {loadingMore ? "Chargement des jours suivants..." : "Scroll pour charger la suite"}
+          {loadingMore && "Chargement des jours suivants..."}
         </div>
       )}
       <div ref={sentinelRef} className="h-8" />

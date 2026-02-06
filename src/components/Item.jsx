@@ -1,3 +1,5 @@
+import CenterBadge from "./CenterBadge.jsx";
+
 const formatTime = (value) => {
   if (!value) {
     return "—";
@@ -33,18 +35,7 @@ const formatPlaces = (taken, max) => {
 
 const formatText = (value) => (value ? String(value) : "");
 
-const CENTER_META = {
-  5279: { label: "Lille" },
-  5280: { label: "Marq" }
-};
-
-const getCenterMeta = (centerId) =>
-  CENTER_META[centerId] ?? {
-    label: `Centre ${formatText(centerId)}`
-  };
-
 export default function Item({ item }) {
-  const centerMeta = getCenterMeta(item?.center_id);
   const activity = formatText(item?.activity);
   const room = formatText(item?.room);
   const employee = formatText(item?.employee);
@@ -53,17 +44,21 @@ export default function Item({ item }) {
   const isPast = item?.start ? new Date(item.start).getTime() < Date.now() : false;
 
   return (
-    <div className={`flex gap-4 py-3 mx-2 ${isPast ? "opacity-50" : ""}`}>
+    <div
+      className={`flex gap-4 rounded-md px-2 py-3 transition ${
+        isPast ? "opacity-50" : "hover:bg-surface-alt"
+      }`}
+    >
       <div className="w-16 flex-shrink-0">
         <p className="text-lg font-semibold leading-tight">{formatTime(item?.start)}</p>
         {duration && <p className="text-xs text-muted">{duration}</p>}
       </div>
       <div className="flex-1">
         <div className="flex items-start justify-between gap-3">
-          <p className="text-base font-semibold leading-tight">{activity || "Activite"}</p>
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">
-            {centerMeta.label}
-          </span>
+          <p className="text-base font-semibold leading-tight truncate">
+            {activity || "Activite"}
+          </p>
+          <CenterBadge centerId={item?.center_id} size="sm" />
         </div>
         <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted">
           {places && <span className="text-text">{places}</span>}

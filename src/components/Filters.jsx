@@ -1,23 +1,20 @@
-const CENTER_OPTIONS = [
-  { id: 5279, label: "Lille" },
-  { id: 5280, label: "Marq" }
-];
+import CenterBadge from "./CenterBadge.jsx";
+
+const CENTER_OPTIONS = [5279, 5280];
 
 export default function Filters({ selectedCenters, searchTerm, onToggleCenter, onSearch }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      {CENTER_OPTIONS.map((center) => {
-        const isActive = selectedCenters.includes(center.id);
+      {CENTER_OPTIONS.map((centerId) => {
+        const isActive = selectedCenters.includes(centerId);
         return (
           <button
-            key={center.id}
+            key={centerId}
             type="button"
-            onClick={() => onToggleCenter(center.id)}
-              className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${
-                isActive ? "border-text text-text" : "border-border text-muted"
-              }`}
+            onClick={() => onToggleCenter(centerId)}
+            className="focus:outline-none"
           >
-            {center.label}
+            <CenterBadge centerId={centerId} isActive={isActive} />
           </button>
         );
       })}

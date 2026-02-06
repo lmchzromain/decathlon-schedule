@@ -12,6 +12,8 @@
     --color-text: 30 41 59;
     --color-muted: 100 116 139;
     --color-border: 226 232 240;
+    --color-center-lille: 42 143 105;
+    --color-center-marq: 30 64 175;
   }
 
   body {
@@ -29,5 +31,7 @@
     --color-text: 226 232 240;
     --color-muted: 148 163 184;
     --color-border: 51 65 85;
+    --color-center-lille: 110 231 183;
+    --color-center-marq: 125 211 252;
   }
 }

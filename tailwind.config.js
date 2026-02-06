@@ -10,7 +10,11 @@ export default {
         "surface-alt": "rgb(var(--color-surface-alt) / <alpha-value>)",
         text: "rgb(var(--color-text) / <alpha-value>)",
         muted: "rgb(var(--color-muted) / <alpha-value>)",
-        border: "rgb(var(--color-border) / <alpha-value>)"
+        border: "rgb(var(--color-border) / <alpha-value>)",
+        center: {
+          lille: "rgb(var(--color-center-lille) / <alpha-value>)",
+          marq: "rgb(var(--color-center-marq) / <alpha-value>)"
+        }
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"]
