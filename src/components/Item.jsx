@@ -1,4 +1,5 @@
 import CenterBadge from "./CenterBadge.jsx";
+import CoachIcon from "./icons/CoachIcon.jsx";
 
 const formatTime = (value) => {
   if (!value) {
@@ -35,6 +36,23 @@ const formatPlaces = (taken, max) => {
 
 const formatText = (value) => (value ? String(value) : "");
 
+const formatTitleCase = (value) => {
+  if (!value) {
+    return "";
+  }
+
+  const cleaned = String(value).replace(/\s+(Lille|Marcq)\s*$/i, "").trim();
+  if (!cleaned) {
+    return "";
+  }
+
+  return cleaned
+    .toLowerCase()
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
 const getPlacesTone = (taken, max) => {
   if (max == null || max === 0 || taken == null) {
     return "text-text";
@@ -54,8 +72,8 @@ const getPlacesTone = (taken, max) => {
 
 export default function Item({ item }) {
   const activity = formatText(item?.activity);
-  const room = formatText(item?.room);
-  const employee = formatText(item?.employee);
+  const room = formatTitleCase(item?.room);
+  const employee = formatTitleCase(item?.employee);
   const duration = formatDuration(item?.duration);
   const places = formatPlaces(item?.placesTaken, item?.placesMax);
   const placesTone = getPlacesTone(item?.placesTaken, item?.placesMax);
@@ -72,7 +90,7 @@ export default function Item({ item }) {
         {duration && <p className="text-xs text-muted">{duration}</p>}
       </div>
       <div className="flex-1 min-w-0">
-        <div className="flex min-w-0 items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center justify-between gap-3">
           <p className="min-w-0 flex-1 max-w-full text-sm font-semibold leading-tight truncate">
             {activity || "Activite"}
           </p>
@@ -80,11 +98,16 @@ export default function Item({ item }) {
             <CenterBadge centerId={item?.center_id} size="sm" />
           </div>
         </div>
-        <div className="mt-[2px] flex flex-wrap items-center gap-2 text-xs text-muted">
+        <div className="mt-1 flex min-w-0 flex-wrap items-center gap-2 text-xs text-muted">
           {places && <span className={placesTone}>{places}</span>}
-          {places && (employee || room) && <span>•</span>}
-          {employee && <span>{employee}</span>}
-          {employee && room && <span>•</span>}
+          {places && (employee || room) && <span className="opacity-70">•</span>}
+          {employee && (
+            <span className="flex items-center gap-1">
+              <CoachIcon className="size-3 text-muted/90" />
+              <span className="truncate">{employee}</span>
+            </span>
+          )}
+          {employee && room && <span className="opacity-70">•</span>}
           {room && <span>{room}</span>}
         </div>
       </div>

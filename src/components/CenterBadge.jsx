@@ -4,7 +4,7 @@ const CENTER_META = {
     classes: "bg-center-lille/20 text-center-lille/70"
   },
   5280: {
-    label: "Marq",
+    label: "Marcq",
     classes: "bg-center-marq/20 text-center-marq/70"
   }
 };
@@ -17,12 +17,12 @@ export default function CenterBadge({ centerId, isActive, size = "md" }) {
   const sizeClasses = size === "sm" ? "px-2 py-0.5 text-[10px]" : "px-3 py-1 text-xs";
 
   return (
-    <span
-      className={`inline-flex items-center rounded-full font-semibold uppercase tracking-[0.2em] transition ${sizeClasses} ${
+    <div
+      className={`rounded-full font-semibold uppercase tracking-[0.2em] transition ${sizeClasses} ${
         isActive === false ? "bg-surface-alt text-muted" : center.classes
       }`}
     >
       {center.label}
-    </span>
+    </div>
   );
 }
