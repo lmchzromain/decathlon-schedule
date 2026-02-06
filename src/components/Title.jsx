@@ -1,6 +1,6 @@
 export default function Title() {
   return (
-    <div className="px-2">
+    <div>
       <p className="text-xs font-semibold uppercase tracking-[0.4em] text-brand-primary">
         Decathlon Fitness Club
       </p>

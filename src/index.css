@@ -3,7 +3,30 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: light dark;
+    --color-bg: 255 255 255;
+    --color-surface: 247 248 252;
+    --color-surface-alt: 240 242 248;
+    --color-text: 15 23 42;
+    --color-muted: 100 116 139;
+    --color-border: 226 232 240;
+  }
+
   body {
-    @apply font-sans text-slate-900 bg-white;
+    @apply font-sans;
+    background-color: rgb(var(--color-bg));
+    color: rgb(var(--color-text));
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: 12 14 23;
+    --color-surface: 20 23 35;
+    --color-surface-alt: 26 30 44;
+    --color-text: 226 232 240;
+    --color-muted: 148 163 184;
+    --color-border: 51 65 85;
   }
 }

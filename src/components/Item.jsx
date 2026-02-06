@@ -56,17 +56,17 @@ export default function Item({ item }) {
     <div className={`flex gap-4 py-3 ${isPast ? "opacity-50" : ""}`}>
       <div className="w-16 flex-shrink-0">
         <p className="text-lg font-semibold leading-tight">{formatTime(item?.start)}</p>
-        {duration && <p className="text-xs text-slate-500">{duration}</p>}
+        {duration && <p className="text-xs text-[rgb(var(--color-muted))]">{duration}</p>}
       </div>
       <div className="flex-1">
         <div className="flex items-start justify-between gap-3">
           <p className="text-base font-semibold leading-tight">{activity || "Activite"}</p>
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[rgb(var(--color-muted))]">
             {centerMeta.label}
           </span>
         </div>
-        <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-          {places && <span className="text-slate-700">{places}</span>}
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-[rgb(var(--color-muted))]">
+          {places && <span className="text-[rgb(var(--color-text))]">{places}</span>}
           {places && (employee || room) && <span>•</span>}
           {employee && <span>{employee}</span>}
           {employee && room && <span>•</span>}
