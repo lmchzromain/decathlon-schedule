@@ -161,20 +161,23 @@ export default function App() {
         }
 
         setLoadingMore(true);
-        const nextIndex = pageIndex + 1;
+        setPageIndex((prev) => {
+          const nextIndex = prev + 1;
 
-        fetchBatch(nextIndex, initialDate)
-          .then((nextBatch) => {
-            setItems((prev) => [...prev, ...nextBatch]);
-            setPageIndex(nextIndex);
-            setHasMore(nextBatch.length > 0);
-          })
-          .catch((err) => {
-            setError(err instanceof Error ? err.message : "Erreur inconnue");
-          })
-          .finally(() => {
-            setLoadingMore(false);
-          });
+          fetchBatch(nextIndex, initialDate)
+            .then((nextBatch) => {
+              setItems((previous) => [...previous, ...nextBatch]);
+              setHasMore(nextBatch.length > 0);
+            })
+            .catch((err) => {
+              setError(err instanceof Error ? err.message : "Erreur inconnue");
+            })
+            .finally(() => {
+              setLoadingMore(false);
+            });
+
+          return nextIndex;
+        });
       },
       { rootMargin: "200px" }
     );
@@ -185,6 +188,7 @@ export default function App() {
       observer.disconnect();
     };
   }, [loadingMore, loading, pageIndex, hasMore]);
+
 
   const sortedItems = useMemo(() => {
     return [...items].sort((a, b) => {
@@ -215,6 +219,38 @@ export default function App() {
         return activity.includes(normalizedSearch) || coach.includes(normalizedSearch);
       });
   }, [sortedItems, selectedCenters, searchTerm]);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || loadingMore || loading || !hasMore) {
+      return;
+    }
+
+    const rect = sentinel.getBoundingClientRect();
+    const isVisible = rect.top <= window.innerHeight && rect.bottom >= 0;
+    if (!isVisible) {
+      return;
+    }
+
+    setLoadingMore(true);
+    setPageIndex((prev) => {
+      const nextIndex = prev + 1;
+
+      fetchBatch(nextIndex, initialDate)
+        .then((nextBatch) => {
+          setItems((previous) => [...previous, ...nextBatch]);
+          setHasMore(nextBatch.length > 0);
+        })
+        .catch((err) => {
+          setError(err instanceof Error ? err.message : "Erreur inconnue");
+        })
+        .finally(() => {
+          setLoadingMore(false);
+        });
+
+      return nextIndex;
+    });
+  }, [filteredItems.length, selectedCenters, searchTerm, hasMore, loading, loadingMore]);
 
   const toggleCenter = (centerId) => {
     setSelectedCenters((prev) =>
