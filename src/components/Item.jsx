@@ -110,16 +110,16 @@ export default function Item({ item }) {
           </div>
         </div>
         <div className="mt-1 flex min-w-0 flex-wrap items-center gap-2 text-xs text-muted">
-          {places && <span className={placesTone}>{places}</span>}
-          {places && (employee || room) && <span className="opacity-70">•</span>}
           {employee && (
             <span className="flex items-center gap-1">
-              <CoachIcon className="size-3 text-muted/90" />
+              <CoachIcon className="size-3 text-muted/80" />
               <span className="truncate">{employee}</span>
             </span>
           )}
           {employee && room && <span className="opacity-70">•</span>}
           {room && <span>{room}</span>}
+          {(employee || room) && places && <span className="opacity-70">•</span>}
+          {places && <span className={placesTone}>{places}</span>}
         </div>
       </div>
     </a>
