@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Filters from "./components/Filters.jsx";
 import List from "./components/List.jsx";
 import Footer from "./components/Footer.jsx";
@@ -43,7 +43,7 @@ export default function App() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const sentinelRef = useRef(null);
+  const [sentinelEl, setSentinelEl] = useState(null);
   const [selectedCenters, setSelectedCenters] = useState(initialFilters.selectedCenters);
   const [searchTerm, setSearchTerm] = useState(initialFilters.searchTerm);
 
@@ -145,45 +145,52 @@ export default function App() {
     };
   }, []);
 
+  const loadNextPage = useCallback(() => {
+    if (loading || loadingMore || !hasMore) {
+      return;
+    }
+
+    setLoadingMore(true);
+    setPageIndex((prev) => {
+      const nextIndex = prev + 1;
+
+      fetchBatch(nextIndex, initialDate)
+        .then((nextBatch) => {
+          setItems((previous) => [...previous, ...nextBatch]);
+          setHasMore(nextBatch.length > 0);
+        })
+        .catch((err) => {
+          setError(err instanceof Error ? err.message : "Erreur inconnue");
+        })
+        .finally(() => {
+          setLoadingMore(false);
+        });
+
+      return nextIndex;
+    });
+  }, [loading, loadingMore, hasMore, initialDate]);
+
   useEffect(() => {
-    if (!sentinelRef.current) {
+    const target = sentinelEl;
+    if (!target) {
       return undefined;
     }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting || loadingMore || loading || !hasMore) {
-          return;
+        if (entry.isIntersecting) {
+          loadNextPage();
         }
-
-        setLoadingMore(true);
-        setPageIndex((prev) => {
-          const nextIndex = prev + 1;
-
-          fetchBatch(nextIndex, initialDate)
-            .then((nextBatch) => {
-              setItems((previous) => [...previous, ...nextBatch]);
-              setHasMore(nextBatch.length > 0);
-            })
-            .catch((err) => {
-              setError(err instanceof Error ? err.message : "Erreur inconnue");
-            })
-            .finally(() => {
-              setLoadingMore(false);
-            });
-
-          return nextIndex;
-        });
       },
       { rootMargin: "200px" }
     );
 
-    observer.observe(sentinelRef.current);
+    observer.observe(target);
 
     return () => {
       observer.disconnect();
     };
-  }, [loadingMore, loading, pageIndex, hasMore]);
+  }, [loadNextPage, sentinelEl]);
 
 
   const sortedItems = useMemo(() => {
@@ -217,42 +224,27 @@ export default function App() {
   }, [sortedItems, selectedCenters, searchTerm]);
 
   useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel || loadingMore || loading || !hasMore) {
+    const target = sentinelEl;
+    if (!target || loading || loadingMore || !hasMore) {
       return;
     }
 
-    const rect = sentinel.getBoundingClientRect();
+    const rect = target.getBoundingClientRect();
     const isVisible = rect.top <= window.innerHeight && rect.bottom >= 0;
-    if (!isVisible) {
-      return;
+    if (isVisible) {
+      loadNextPage();
     }
-
-    setLoadingMore(true);
-    setPageIndex((prev) => {
-      const nextIndex = prev + 1;
-
-      fetchBatch(nextIndex, initialDate)
-        .then((nextBatch) => {
-          setItems((previous) => [...previous, ...nextBatch]);
-          setHasMore(nextBatch.length > 0);
-        })
-        .catch((err) => {
-          setError(err instanceof Error ? err.message : "Erreur inconnue");
-        })
-        .finally(() => {
-          setLoadingMore(false);
-        });
-
-      return nextIndex;
-    });
-  }, [filteredItems.length, selectedCenters, searchTerm, hasMore, loading, loadingMore]);
+  }, [filteredItems.length, selectedCenters, searchTerm, loadNextPage, loading, loadingMore, hasMore, sentinelEl]);
 
   const toggleCenter = (centerId) => {
     setSelectedCenters((prev) =>
       prev.includes(centerId) ? prev.filter((id) => id !== centerId) : [...prev, centerId]
     );
   };
+
+  const setSentinelRef = useCallback((node) => {
+    setSentinelEl(node);
+  }, []);
 
   return (
     <div className="min-h-screen bg-bg text-text">
@@ -266,7 +258,7 @@ export default function App() {
             error={error}
             loadingMore={loadingMore}
             hasMore={hasMore}
-            sentinelRef={sentinelRef}
+            sentinelRef={setSentinelRef}
           />
         </div>
         <Footer />
