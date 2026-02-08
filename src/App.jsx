@@ -212,6 +212,7 @@ export default function App() {
         const startTime = new Date(item.start).getTime();
         return Number.isNaN(startTime) ? false : startTime >= cutoff;
       })
+      .filter((item) => !item.deleted)
       .filter((item) => selectedCenters.includes(item?.center_id))
       .filter((item) => {
         if (!normalizedSearch) {
