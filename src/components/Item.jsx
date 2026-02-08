@@ -85,7 +85,7 @@ export default function Item({ item }) {
   const placesTone = getPlacesTone(item?.placesTaken, item?.placesMax);
   const isPast = item?.start ? new Date(item.start).getTime() < Date.now() : false;
   const activityId = getActivityId(item);
-  const activityLink = `https://app.heitzfit.com/#/planning/${activityId}`;
+  const activityLink = `https://app.heitzfit.com/#/planning/${activityId}?web=true`;
 
   return (
     <a
