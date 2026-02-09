@@ -24,6 +24,38 @@ const parseCenters = (value) => {
     .filter((entry) => ALL_CENTERS.includes(entry));
 };
 
+const buildSearchMatcher = (raw) => {
+  const value = raw.trim();
+  if (!value) {
+    return null;
+  }
+
+  if (value.startsWith("/") && value.lastIndexOf("/") > 0) {
+    const lastSlashIndex = value.lastIndexOf("/");
+    const pattern = value.slice(1, lastSlashIndex);
+    const flags = value.slice(lastSlashIndex + 1);
+
+    try {
+      const regex = new RegExp(pattern, flags);
+      return (text) => regex.test(text);
+    } catch {
+      const fallback = value.toLowerCase();
+      return (text) => text.includes(fallback);
+    }
+  }
+
+  if (value.includes("|") || value.includes(",")) {
+    const parts = value.split(/[|,]/).map((part) => part.trim().toLowerCase()).filter(Boolean);
+    return (text) => {
+      const hay = text.toLowerCase();
+      return parts.some((term) => hay.includes(term));
+    };
+  }
+
+  const lowered = value.toLowerCase();
+  return (text) => text.toLowerCase().includes(lowered);
+};
+
 const getInitialFilters = () => {
   const params = new URLSearchParams(window.location.search);
   const centersParam = params.get("centers");
@@ -202,7 +234,7 @@ export default function App() {
   }, [items]);
 
   const filteredItems = useMemo(() => {
-    const normalizedSearch = searchTerm.trim().toLowerCase();
+    const matcher = buildSearchMatcher(searchTerm);
     const cutoff = Date.now() - 90 * 60 * 1000;
     return sortedItems
       .filter((item) => {
@@ -215,12 +247,12 @@ export default function App() {
       .filter((item) => !item.deleted)
       .filter((item) => selectedCenters.includes(item?.center_id))
       .filter((item) => {
-        if (!normalizedSearch) {
+        if (!matcher) {
           return true;
         }
-        const activity = item?.activity ? String(item.activity).toLowerCase() : "";
-        const coach = item?.employee ? String(item.employee).toLowerCase() : "";
-        return activity.includes(normalizedSearch) || coach.includes(normalizedSearch);
+        const activity = item?.activity ? String(item.activity) : "";
+        const coach = item?.employee ? String(item.employee) : "";
+        return matcher(activity) || matcher(coach);
       });
   }, [sortedItems, selectedCenters, searchTerm]);
 
