@@ -1,6 +1,7 @@
-import CenterBadge from "./CenterBadge.jsx";
-
-const CENTER_OPTIONS = [5279, 5280];
+const CENTER_OPTIONS = [
+  { id: 5279, label: "Lille" },
+  { id: 5280, label: "Marcq" }
+];
 
 import { useEffect, useState } from "react";
 
@@ -20,17 +21,20 @@ export default function Filters({ selectedCenters, searchTerm, onToggleCenter, o
   }, [localSearch, onSearch]);
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      {CENTER_OPTIONS.map((centerId) => {
-        const isActive = selectedCenters.includes(centerId);
+    <div className="flex flex-wrap items-center gap-1.5">
+      {CENTER_OPTIONS.map((center) => {
+        const isActive = selectedCenters.includes(center.id);
         return (
           <button
-            key={centerId}
+            key={center.id}
             type="button"
-            onClick={() => onToggleCenter(centerId)}
-            className="focus:outline-none"
+            onClick={() => onToggleCenter(center.id)}
+            className={`rounded-full text-white px-2.5 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] transition ${
+              isActive ? "bg-primary" : "bg-primary/10"
+            } focus:outline-none`}
+            aria-pressed={isActive}
           >
-            <CenterBadge centerId={centerId} isActive={isActive} />
+            {center.label}
           </button>
         );
       })}

@@ -1,11 +1,11 @@
 const CENTER_META = {
   5279: {
     label: "Lille",
-    classes: "bg-center-lille/20 text-center-lille/70"
+    classes: "bg-primary text-white"
   },
   5280: {
     label: "Marcq",
-    classes: "bg-center-marq/20 text-center-marq/70"
+    classes: "bg-primary text-white"
   }
 };
 
@@ -14,7 +14,7 @@ const getCenterMeta = (centerId) =>
 
 export default function CenterBadge({ centerId, isActive, size = "md" }) {
   const center = getCenterMeta(centerId);
-  const sizeClasses = size === "sm" ? "px-2 py-0.5 text-[9px]" : "px-2.5 py-0.5 text-[10px]";
+  const sizeClasses = size === "sm" ? "px-1.5 py-0.5 text-[8px]" : "px-2.5 py-0.5 text-[9px]";
 
   return (
     <div
